@@ -12,26 +12,25 @@ public class Duke {
         listOfTasks[index] = new Task(task);
         index++;
         System.out.println(indent + "added " + task);
+        printLines();
     }
 
     public boolean runCommand(String command) {
         printLines();
-        //int length = command.length();
-        //String[] halveStrings = command.split(" ");
+        String[] halveStrings = command.split(" ");
 
         if (command.equals("bye")) {
             return false;
         } else if (command.equals("list")) {
             printAllTasks();
-        } /*else if (halveStrings[0].equals("mark")) {*/
-            /*markTask(Integer.parseInt(halveStrings[1]));*/
-        /*} else if (halveStrings[0].equals("unmark")) {*/
-            /*unmarkTask(Integer.parseInt(halveStrings[1]));*/
-        /*}*/ else {
+        } else if (halveStrings[0].equals("mark")) {
+            markTask(Integer.parseInt(halveStrings[1]));
+        } else if (halveStrings[0].equals("unmark")) {
+            unmarkTask(Integer.parseInt(halveStrings[1]));
+        } else {
             addString(command);
         }
 
-        printLines();
         return true;
     }
 
@@ -51,13 +50,21 @@ public class Duke {
         System.out.println("---------------------------------------------");
     }
 
-    //public void markTask(int index) {
-        //listOfTasks[index - 1].markIsDone();
-    //}
+    public void markTask(int index) {
+        listOfTasks[index - 1].markIsDone();
+        printLines();
+        System.out.println("Nice, I have marked this task as done: ");
+        //printLines();
+        printAllTasks();
+    }
 
-    //public void unmarkTask(int index) {
-        //listOfTasks[index - 1].unmarkIsDone();
-    //}
+    public void unmarkTask(int index) {
+        listOfTasks[index - 1].unmarkIsDone();
+        printLines();
+        System.out.println("Ok, I have marked this task as not done yet: ");
+        //printLines();
+        printAllTasks();
+    }
 
     public void printAllTasks() {
         for (int i = 0; i < index; i++) {
@@ -65,6 +72,7 @@ public class Duke {
             Task currTask = listOfTasks[i];
             System.out.println(indent + currIndex + ". " + currTask);
         }
+        printLines();
     }
 
     public void startDuke() {
