@@ -1,3 +1,4 @@
+//import java.util.Arrays;
 import java.util.Scanner;
 
 public class Duke {
@@ -8,27 +9,79 @@ public class Duke {
     private int index = 0;
 
 
-    public void addString(String task) {
-        listOfTasks[index] = new Task(task);
+    public void addTodo(String task) {
+        ToDo toDo = new ToDo(task);
+        listOfTasks[index] = toDo;
         index++;
-        System.out.println(indent + "added " + task);
+        gotItStatement();
+        System.out.println(indent + toDo); 
         printLines();
+    }
+
+    public void gotItStatement() {
+        System.out.println("Got it. I've added this task");
+    }
+
+    public void addDeadline(String taskStatement) {
+        String[] splittedStatement = separateStrings(taskStatement);
+        String description = splittedStatement[0];
+        String by = splittedStatement[1];
+        Deadline deadline = new Deadline(description, by);
+        listOfTasks[index] = deadline;
+        index++;
+        gotItStatement();
+        System.out.println(indent + deadline);
+        printLines();
+    }
+
+    public void addEvent(String taskStatement) {
+        String[] splittedStatement = separateStrings(taskStatement);
+        String description = splittedStatement[0];
+        String at = splittedStatement[1];
+        Event event = new Event(description, at);
+        listOfTasks[index] = event;
+        index++;
+        gotItStatement();
+        System.out.println(indent + event);
+        printLines();
+    }
+
+    public String[] separateStrings(String taskStatement) {
+        String[] splitted = taskStatement.split("/", 2);
+        splitted[1] = splitted[1].trim().split(" ", 2)[1];
+        //System.out.println(splitted[1]);
+        return splitted;
     }
 
     public boolean runCommand(String command) {
         printLines();
-        String[] halveStrings = command.split(" ");
+        String[] halveStrings = command.split(" ", 2);
+        String typeTask = halveStrings[0];
 
-        if (command.equals("bye")) {
+        switch (typeTask) {
+        case "bye":
             return false;
-        } else if (command.equals("list")) {
+        case "list":
             printAllTasks();
-        } else if (halveStrings[0].equals("mark")) {
+            break;
+        case "mark":
             markTask(Integer.parseInt(halveStrings[1]));
-        } else if (halveStrings[0].equals("unmark")) {
+            break;
+        case "unmark":
             unmarkTask(Integer.parseInt(halveStrings[1]));
-        } else {
-            addString(command);
+            break;
+        case "deadline":
+            addDeadline(halveStrings[1]);
+            break;
+        case "event":
+            addEvent(halveStrings[1]);
+            break;
+        case "todo":
+            addTodo(typeTask);
+            break;
+        default:
+            System.out.println("Incorrect type. Add a valid option");
+            printLines();
         }
 
         return true;
@@ -41,7 +94,6 @@ public class Duke {
     }
 
     public static void byeMessage() {
-        printLines();
         System.out.println("Bye, see you next time");
         printLines();
     }
@@ -52,7 +104,6 @@ public class Duke {
 
     public void markTask(int index) {
         listOfTasks[index - 1].markIsDone();
-        printLines();
         System.out.println("Nice, I have marked this task as done: ");
         //printLines();
         printAllTasks();
@@ -60,7 +111,6 @@ public class Duke {
 
     public void unmarkTask(int index) {
         listOfTasks[index - 1].unmarkIsDone();
-        printLines();
         System.out.println("Ok, I have marked this task as not done yet: ");
         //printLines();
         printAllTasks();
