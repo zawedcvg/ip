@@ -4,6 +4,7 @@ import java.util.Scanner;
 import exceptions.DukeException;
 import exceptions.DukeEmptyTaskDescriptionException;
 import exceptions.DukeUnknownCommandException;
+import exceptions.DukeIncorrectIndexException;
 
 public class Duke {
 
@@ -55,10 +56,20 @@ public class Duke {
         return splitted;
     }
 
-    public boolean runCommand(String command, String description) {
+    public void deleteTask(int index) throws DukeException {
+        if (index > listOfTasks.size()) {
+            throw new DukeIncorrectIndexException();
+        }
+        Task task = listOfTasks.get(index - 1);
+        listOfTasks.remove(index - 1);
+        System.out.println(indent + "Noted. I have removed this task\n" + task);
+        System.out.println("Now you have " + listOfTasks.size() + " tasks in the list");
         printLines();
-        //String[] halveStrings = command.split(" ", 2);
-        //String typeTask = halveStrings[0];
+
+    }
+
+    public boolean runCommand(String command, String description) throws DukeException {
+        printLines();
         description = description.trim();
         boolean isEmptyDescription = description.equals("");
 
@@ -92,9 +103,6 @@ public class Duke {
                 if (isEmptyDescription) {
                     throw new DukeEmptyTaskDescriptionException();
                 } 
-                if (isEmptyDescription) {
-                    throw new DukeEmptyTaskDescriptionException();
-                } 
                 addEvent(description);
                 break;
             case "todo":
@@ -103,9 +111,14 @@ public class Duke {
                 } 
                 addTodo(description);
                 break;
+            case "delete":
+                if (isEmptyDescription) {
+                    throw new DukeEmptyTaskDescriptionException();
+                }
+                deleteTask(Integer.parseInt(description));
+                break;
             default:
                 throw new DukeUnknownCommandException();
-                //printLines();
             }
         }
         catch (DukeUnknownCommandException | DukeEmptyTaskDescriptionException e) {
@@ -135,14 +148,20 @@ public class Duke {
         System.out.println("---------------------------------------------");
     }
 
-    public void markTask(int index) {
+    public void markTask(int index) throws DukeException {
+        if (index > listOfTasks.size()) {
+            throw new DukeIncorrectIndexException();
+        }
         listOfTasks.get(index - 1).markIsDone();
         System.out.println("Nice, I have marked this task as done: ");
         //printLines();
         printAllTasks();
     }
 
-    public void unmarkTask(int index) {
+    public void unmarkTask(int index) throws DukeException  {
+        if (index > listOfTasks.size()) {
+            throw new DukeIncorrectIndexException();
+        }
         listOfTasks.get(index - 1).unmarkIsDone();
         System.out.println("Ok, I have marked this task as not done yet: ");
         //printLines();
