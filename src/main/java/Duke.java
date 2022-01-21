@@ -1,18 +1,22 @@
 //import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
+import exceptions.DukeException;
+import exceptions.DukeEmptyTaskDescriptionException;
+import exceptions.DukeUnknownCommandException;
 
 public class Duke {
 
     Scanner sc = new Scanner(System.in);
-    public Task[] listOfTasks = new Task[100];
+    public ArrayList<Task> listOfTasks = new ArrayList<>();
     private String indent = "  ";
-    private int index = 0;
+    //private int index = 0;
 
 
     public void addTodo(String task) {
         ToDo toDo = new ToDo(task);
-        listOfTasks[index] = toDo;
-        index++;
+        
+        listOfTasks.add(toDo);
         gotItStatement();
         System.out.println(indent + toDo); 
         printLines();
@@ -27,8 +31,7 @@ public class Duke {
         String description = splittedStatement[0];
         String by = splittedStatement[1];
         Deadline deadline = new Deadline(description, by);
-        listOfTasks[index] = deadline;
-        index++;
+        listOfTasks.add(deadline);
         gotItStatement();
         System.out.println(indent + deadline);
         printLines();
@@ -39,8 +42,7 @@ public class Duke {
         String description = splittedStatement[0];
         String at = splittedStatement[1];
         Event event = new Event(description, at);
-        listOfTasks[index] = event;
-        index++;
+        listOfTasks.add(event);
         gotItStatement();
         System.out.println(indent + event);
         printLines();
@@ -53,38 +55,69 @@ public class Duke {
         return splitted;
     }
 
-    public boolean runCommand(String command) {
+    public boolean runCommand(String command, String description) {
         printLines();
-        String[] halveStrings = command.split(" ", 2);
-        String typeTask = halveStrings[0];
+        //String[] halveStrings = command.split(" ", 2);
+        //String typeTask = halveStrings[0];
+        description = description.trim();
+        boolean isEmptyDescription = description.equals("");
 
-        switch (typeTask) {
-        case "bye":
-            return false;
-        case "list":
-            printAllTasks();
-            break;
-        case "mark":
-            markTask(Integer.parseInt(halveStrings[1]));
-            break;
-        case "unmark":
-            unmarkTask(Integer.parseInt(halveStrings[1]));
-            break;
-        case "deadline":
-            addDeadline(halveStrings[1]);
-            break;
-        case "event":
-            addEvent(halveStrings[1]);
-            break;
-        case "todo":
-            addTodo(typeTask);
-            break;
-        default:
-            System.out.println("Incorrect type. Add a valid option");
+        try {
+
+            switch (command) {
+            case "bye":
+                return false;
+            case "list":
+                printAllTasks();
+                break;
+            case "mark":
+                if (isEmptyDescription) {
+                    throw new DukeEmptyTaskDescriptionException();
+                } 
+                markTask(Integer.parseInt(description));
+                break;
+            case "unmark":
+                if (isEmptyDescription) {
+                    throw new DukeEmptyTaskDescriptionException();
+                } 
+                unmarkTask(Integer.parseInt(description));
+                break;
+            case "deadline":
+                if (isEmptyDescription) {
+                    throw new DukeEmptyTaskDescriptionException();
+                } 
+                addDeadline(description);
+                break;
+            case "event":
+                if (isEmptyDescription) {
+                    throw new DukeEmptyTaskDescriptionException();
+                } 
+                if (isEmptyDescription) {
+                    throw new DukeEmptyTaskDescriptionException();
+                } 
+                addEvent(description);
+                break;
+            case "todo":
+                if (isEmptyDescription) {
+                    throw new DukeEmptyTaskDescriptionException();
+                } 
+                addTodo(description);
+                break;
+            default:
+                throw new DukeUnknownCommandException();
+                //printLines();
+            }
+        }
+        catch (DukeUnknownCommandException | DukeEmptyTaskDescriptionException e) {
+            System.out.println(e.getMessage());
             printLines();
         }
-
         return true;
+
+    }
+
+    public boolean checkLength(String[] stringArr, int length) {
+        return stringArr.length >= length;
     }
 
     public static void entryMessage() {
@@ -103,42 +136,46 @@ public class Duke {
     }
 
     public void markTask(int index) {
-        listOfTasks[index - 1].markIsDone();
+        listOfTasks.get(index - 1).markIsDone();
         System.out.println("Nice, I have marked this task as done: ");
         //printLines();
         printAllTasks();
     }
 
     public void unmarkTask(int index) {
-        listOfTasks[index - 1].unmarkIsDone();
+        listOfTasks.get(index - 1).unmarkIsDone();
         System.out.println("Ok, I have marked this task as not done yet: ");
         //printLines();
         printAllTasks();
     }
 
     public void printAllTasks() {
-        for (int i = 0; i < index; i++) {
+        for (int i = 0; i < listOfTasks.size(); i++) {
             int currIndex = i + 1;
-            Task currTask = listOfTasks[i];
+            Task currTask = listOfTasks.get(i);
             System.out.println(indent + currIndex + ". " + currTask);
         }
         printLines();
     }
 
-    public void startDuke() {
+    public void startDuke() throws DukeException{
         entryMessage();
-        boolean loop = true;
+        String command = sc.next();
+        String description = sc.nextLine();
 
-        while (loop) {
-            String command = sc.nextLine();
-            loop = runCommand(command);
+        while (!command.equals("bye")) {
+            runCommand(command, description);
+            command = sc.next();
+            if (!command.equals("bye")) {
+                description = sc.nextLine();
+            }
         }
 
         byeMessage();
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DukeException {
         Duke duke = new Duke();
         duke.startDuke();
     }
