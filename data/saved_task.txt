@@ -1,0 +1,4 @@
+T | 1 | something
+E | 1 | deadlibne | somewhere
+E | 0 | do something | today
+T | 0 | something

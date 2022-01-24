@@ -11,8 +11,11 @@ public class Duke {
     Scanner sc = new Scanner(System.in);
     public ArrayList<Task> listOfTasks = new ArrayList<>();
     private String indent = "  ";
+    Storage storage = new Storage("data/saved_task.txt");
     //private int index = 0;
-
+    public boolean isEmptyString(String s) {
+        return s.equals("");
+    }
 
     public void addTodo(String task) {
         ToDo toDo = new ToDo(task);
@@ -27,7 +30,7 @@ public class Duke {
         System.out.println("Got it. I've added this task");
     }
 
-    public void addDeadline(String taskStatement) {
+    public void addDeadline(String taskStatement) throws DukeException {
         String[] splittedStatement = separateStrings(taskStatement);
         String description = splittedStatement[0];
         String by = splittedStatement[1];
@@ -38,7 +41,7 @@ public class Duke {
         printLines();
     }
 
-    public void addEvent(String taskStatement) {
+    public void addEvent(String taskStatement) throws DukeException {
         String[] splittedStatement = separateStrings(taskStatement);
         String description = splittedStatement[0];
         String at = splittedStatement[1];
@@ -56,7 +59,11 @@ public class Duke {
         return splitted;
     }
 
-    public void deleteTask(int index) throws DukeException {
+    public void deleteTask(String description) throws DukeException {
+        if(isEmptyString(description)) {
+            throw new DukeIncorrectIndexException();
+        }
+        int index = Integer.parseInt(description);
         if (index > listOfTasks.size()) {
             throw new DukeIncorrectIndexException();
         }
@@ -67,11 +74,9 @@ public class Duke {
         printLines();
 
     }
-
     public boolean runCommand(String command, String description) throws DukeException {
         printLines();
         description = description.trim();
-        boolean isEmptyDescription = description.equals("");
 
         try {
 
@@ -82,40 +87,22 @@ public class Duke {
                 printAllTasks();
                 break;
             case "mark":
-                if (isEmptyDescription) {
-                    throw new DukeEmptyTaskDescriptionException();
-                } 
-                markTask(Integer.parseInt(description));
+                markTask(description);
                 break;
             case "unmark":
-                if (isEmptyDescription) {
-                    throw new DukeEmptyTaskDescriptionException();
-                } 
-                unmarkTask(Integer.parseInt(description));
+                unmarkTask(description);
                 break;
             case "deadline":
-                if (isEmptyDescription) {
-                    throw new DukeEmptyTaskDescriptionException();
-                } 
                 addDeadline(description);
                 break;
             case "event":
-                if (isEmptyDescription) {
-                    throw new DukeEmptyTaskDescriptionException();
-                } 
                 addEvent(description);
                 break;
             case "todo":
-                if (isEmptyDescription) {
-                    throw new DukeEmptyTaskDescriptionException();
-                } 
                 addTodo(description);
                 break;
             case "delete":
-                if (isEmptyDescription) {
-                    throw new DukeEmptyTaskDescriptionException();
-                }
-                deleteTask(Integer.parseInt(description));
+                deleteTask(description);
                 break;
             default:
                 throw new DukeUnknownCommandException();
@@ -148,17 +135,25 @@ public class Duke {
         System.out.println("---------------------------------------------");
     }
 
-    public void markTask(int index) throws DukeException {
-        if (index > listOfTasks.size()) {
+    public void markTask(String description) throws DukeException {
+        if(isEmptyString(description)) {
             throw new DukeIncorrectIndexException();
         }
+        int index = Integer.parseInt(description);
+        if (index > listOfTasks.size()) {
+            throw new DukeIncorrectIndexException();
+        } 
         listOfTasks.get(index - 1).markIsDone();
         System.out.println("Nice, I have marked this task as done: ");
         //printLines();
         printAllTasks();
     }
 
-    public void unmarkTask(int index) throws DukeException  {
+    public void unmarkTask(String description) throws DukeException  {
+        if(isEmptyString(description)) {
+            throw new DukeIncorrectIndexException();
+        }
+        int index = Integer.parseInt(description);
         if (index > listOfTasks.size()) {
             throw new DukeIncorrectIndexException();
         }
@@ -179,6 +174,7 @@ public class Duke {
 
     public void startDuke() throws DukeException{
         entryMessage();
+        listOfTasks = storage.fetch();
         String command = sc.next();
         String description = sc.nextLine();
 
@@ -189,6 +185,7 @@ public class Duke {
                 description = sc.nextLine();
             }
         }
+        storage.save(listOfTasks);
 
         byeMessage();
     }
