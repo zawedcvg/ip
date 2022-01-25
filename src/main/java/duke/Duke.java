@@ -1,8 +1,8 @@
 package duke;
 import java.util.Scanner;
-import exceptions.DukeException;
-import exceptions.DukeEmptyTaskDescriptionException;
-import exceptions.DukeUnknownCommandException;
+import duke.exceptions.DukeException;
+import duke.exceptions.DukeEmptyTaskDescriptionException;
+import duke.exceptions.DukeUnknownCommandException;
 
 public class Duke {
 

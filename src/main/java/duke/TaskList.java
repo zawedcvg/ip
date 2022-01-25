@@ -1,9 +1,9 @@
 package duke;
 import java.util.ArrayList;
-import exceptions.DukeException;
-import exceptions.DukeEmptyTaskDescriptionException;
-import exceptions.DukeUnknownCommandException;
-import exceptions.DukeIncorrectIndexException;
+import duke.exceptions.DukeException;
+import duke.exceptions.DukeEmptyTaskDescriptionException;
+import duke.exceptions.DukeUnknownCommandException;
+import duke.exceptions.DukeIncorrectIndexException;
 public class TaskList {
     private ArrayList<Task> listOfTasks;
 
