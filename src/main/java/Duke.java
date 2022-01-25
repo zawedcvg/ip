@@ -34,6 +34,7 @@ public class Duke {
         String[] splittedStatement = separateStrings(taskStatement);
         String description = splittedStatement[0];
         String by = splittedStatement[1];
+        by = Parser.getDate(by) + " " + Parser.getTime(by);
         Deadline deadline = new Deadline(description, by);
         listOfTasks.add(deadline);
         gotItStatement();
@@ -45,6 +46,7 @@ public class Duke {
         String[] splittedStatement = separateStrings(taskStatement);
         String description = splittedStatement[0];
         String at = splittedStatement[1];
+        at = Parser.getDate(at) + Parser.getTime(at);
         Event event = new Event(description, at);
         listOfTasks.add(event);
         gotItStatement();
