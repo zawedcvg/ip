@@ -1,3 +1,4 @@
+package duke;
 import java.util.ArrayList;
 import exceptions.DukeException;
 import exceptions.DukeEmptyTaskDescriptionException;
