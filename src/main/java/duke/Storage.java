@@ -2,24 +2,34 @@ package duke;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+/**
+ * facilitates the storage and retrieval of data from the hard drive 
+ */
 
 public class Storage {
 
     private String path;
 
+    /**
+     * 
+     * @param path contains the string pointing to the saved data
+     */
+
     public Storage(String path) {
         this.path = path;
     }
 
+    /**
+     * to save the data into the hard drive
+     * @param listOfTasks is the list of tasks that is to be saved in the hard drive
+     */
     public void save(ArrayList<Task> listOfTasks) {
         try {
 
             File f = new File(path);
-            System.out.println(f.getAbsolutePath());
 
             if (!f.exists()) {
                 f.createNewFile();
@@ -36,6 +46,10 @@ public class Storage {
             e.printStackTrace();
         }
     }
+    /**
+     * function to return tasks from the harddrive 
+     * @return an arraylist of tasks from the hard drive
+     */
 
     public ArrayList<Task> fetch() {
 
@@ -43,6 +57,7 @@ public class Storage {
         ArrayList<Task> listOfTasks = new ArrayList<Task>();
         try {
             if (!f.exists()) {
+                f.getParentFile().mkdirs();
                 f.createNewFile();
             }
             Scanner scanner = new Scanner(f);
@@ -68,16 +83,13 @@ public class Storage {
                         break;
                 }
             }
+            scanner.close();
 
-            //listOfTasks.add(new ToDo("soe"));
-            
         } catch (IOException e) {
             e.printStackTrace();
 
         }
         return listOfTasks;
-
-
     }
 
 }

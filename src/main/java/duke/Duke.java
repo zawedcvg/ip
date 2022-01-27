@@ -4,29 +4,39 @@ import duke.exceptions.DukeException;
 import duke.exceptions.DukeEmptyTaskDescriptionException;
 import duke.exceptions.DukeUnknownCommandException;
 
+/** 
+ * The main program where everthing starts
+ *
+ *
+ *
+ * */
+
 public class Duke {
 
     private Scanner sc;
     private Storage storage;
     private TaskList taskList;
 
-    //private int index = 0;
-    //
     public Duke() {
         storage = new Storage("data/saved_task.txt");
         sc = new Scanner(System.in);
         taskList = new TaskList(storage.fetch());
     }
 
-    public boolean runCommand(String command, String description) throws DukeException {
+    /**
+     * 
+     * @param command the command that is to be executed
+     * @param description the description associated with a task
+     * @throws DukeException
+     */
+
+    public void runCommand(String command, String description) throws DukeException {
         Ui.printLines();
         description = description.trim();
 
         try {
 
             switch (command) {
-            case "bye":
-                return false;
             case "list":
                 Ui.printAllTasks(taskList.getTaskList());
                 break;
@@ -56,9 +66,13 @@ public class Duke {
             System.out.println(e.getMessage());
             Ui.printLines();
         }
-        return true;
-
     }
+
+    /**
+     * starts the entire program
+     * @throws DukeException
+     */
+
 
     public void startDuke() throws DukeException{
         Ui.entryMessage();
@@ -78,6 +92,11 @@ public class Duke {
     }
 
 
+    /**
+     * 
+     * @param args
+     * @throws DukeException
+     */
     public static void main(String[] args) throws DukeException {
         Duke duke = new Duke();
         duke.startDuke();
