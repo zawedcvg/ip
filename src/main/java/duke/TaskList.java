@@ -74,5 +74,17 @@ public class TaskList {
 
     }
 
+    public void findTask(String description, ArrayList<Task> taskList) {
+        ArrayList<Task> temp = new ArrayList<Task>();
+
+        for (Task task : taskList) {
+            if (task.getDescription().contains(description)) {
+                temp.add(task);
+            }
+        }
+        Ui.findMessage(temp);
+    }
+
+
 
 }

@@ -48,6 +48,9 @@ public class Duke {
             case "delete":
                 taskList.deleteTask(description);
                 break;
+            case "find":
+                taskList.findTask(description, taskList.getTaskList());
+                break;
             default:
                 throw new DukeUnknownCommandException();
             }
