@@ -55,6 +55,18 @@ public class Ui {
 
     }
 
+    /**
+     * function to print message on running find
+     * @param listOfTasks list of tasks that match the description
+     */
+    public static void findMessage(ArrayList<Task> listOfTasks) {
+        System.out.println("Noted. I have found this tasks matching your description\n");
+        for (Task task : listOfTasks) {
+            System.out.println(indent + task);
+        }
+        printLines();
+
+    }
     public static void printTask(Task task) {
         System.out.println(indent + task);
     }
