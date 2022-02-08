@@ -2,7 +2,6 @@ package duke;
 import java.util.ArrayList;
 import duke.exceptions.DukeException;
 import duke.exceptions.DukeEmptyTaskDescriptionException;
-import duke.exceptions.DukeUnknownCommandException;
 import duke.exceptions.DukeIncorrectIndexException;
 public class TaskList {
     private ArrayList<Task> listOfTasks;
@@ -19,62 +18,68 @@ public class TaskList {
         return this.listOfTasks;
     }
 
-    public void addTodo(String task) {
+    public String addTodo(String task) {
         ToDo toDo = new ToDo(task);
         listOfTasks.add(toDo);
-        Ui.addTaskMessage(toDo);
+        return Ui.addTaskMessage(toDo);
     }
 
-    public void addDeadline(String taskStatement) throws DukeException {
+    public String addDeadline(String taskStatement) throws DukeException {
+        if (taskStatement.equals("")) {
+            throw new DukeEmptyTaskDescriptionException();
+        }
         String description = Parser.getDescription(taskStatement);
         String by = Parser.getDateAndTime(taskStatement);
         Deadline deadline = new Deadline(description, by);
         listOfTasks.add(deadline);
-        Ui.addTaskMessage(deadline);
+        return Ui.addTaskMessage(deadline);
     }
 
-    public void addEvent(String taskStatement) throws DukeException {
+    public String addEvent(String taskStatement) throws DukeException {
         String description = Parser.getDescription(taskStatement);
         String at = Parser.getDateAndTime(taskStatement);
         Event event = new Event(description, at);
         listOfTasks.add(event);
-        Ui.addTaskMessage(event);
+        return Ui.addTaskMessage(event);
     }
 
     private boolean isEmptyString(String string) {
         return string.equals("");
     }
 
-    public void markTask(String description) throws DukeException {
+    public String markTask(String description) throws DukeException {
         int index = Integer.parseInt(description);
         if(isEmptyString(description) || index > listOfTasks.size()) {
             throw new DukeIncorrectIndexException();
         }
         listOfTasks.get(index - 1).markIsDone();
-        Ui.markAsDone(listOfTasks);
+        return Ui.markAsDone(listOfTasks.get(index - 1));
     }
 
-    public void unmarkTask(String description) throws DukeException {
+    public String unmarkTask(String description) throws DukeException {
         int index = Integer.parseInt(description);
         if (isEmptyString(description) || index > listOfTasks.size()) {
             throw new DukeIncorrectIndexException();
         }
         listOfTasks.get(index - 1).unmarkIsDone();
-        Ui.markAsNotDone(listOfTasks);
+        return Ui.markAsNotDone(listOfTasks.get(index - 1));
     }
 
-    public void deleteTask(String description) throws DukeException {
+    public String deleteTask(String description) throws DukeException {
         int index = Integer.parseInt(description);
         if(isEmptyString(description) || index > listOfTasks.size()) {
             throw new DukeIncorrectIndexException();
         }
         Task task = listOfTasks.get(index - 1);
         listOfTasks.remove(index - 1);
-        Ui.deleteMessage(task, listOfTasks.size());
+        return Ui.deleteMessage(task, listOfTasks.size());
 
     }
 
-    public void findTask(String description, ArrayList<Task> taskList) {
+    public String findTask(String description, ArrayList<Task> taskList) throws DukeException {
+        if (description.equals("")) {
+            throw new DukeEmptyTaskDescriptionException();
+        }
         ArrayList<Task> temp = new ArrayList<Task>();
 
         for (Task task : taskList) {
@@ -82,7 +87,7 @@ public class TaskList {
                 temp.add(task);
             }
         }
-        Ui.findMessage(temp);
+        return Ui.findMessage(temp);
     }
 
 

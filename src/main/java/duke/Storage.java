@@ -26,7 +26,7 @@ public class Storage {
      * to save the data into the hard drive
      * @param listOfTasks is the list of tasks that is to be saved in the hard drive
      */
-    public void save(ArrayList<Task> listOfTasks) {
+    public void saveTask(ArrayList<Task> listOfTasks) {
         try {
 
             File f = new File(path);
@@ -51,7 +51,7 @@ public class Storage {
      * @return an arraylist of tasks from the hard drive
      */
 
-    public ArrayList<Task> fetch() {
+    public ArrayList<Task> fetchTask() {
 
         File f = new File(path);
         ArrayList<Task> listOfTasks = new ArrayList<Task>();

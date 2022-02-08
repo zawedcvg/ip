@@ -1,107 +1,86 @@
 package duke;
-import java.util.Scanner;
 import duke.exceptions.DukeException;
-import duke.exceptions.DukeEmptyTaskDescriptionException;
 import duke.exceptions.DukeUnknownCommandException;
-
 /** 
  * The main program where everthing starts
- *
- *
- *
  * */
 
 public class Duke {
 
-    private Scanner sc;
     private Storage storage;
     private TaskList taskList;
 
     public Duke() {
         storage = new Storage("data/saved_task.txt");
-        sc = new Scanner(System.in);
-        taskList = new TaskList(storage.fetch());
+        taskList = new TaskList(storage.fetchTask());
     }
 
     /**
      * 
-     * @param command the command that is to be executed
-     * @param description the description associated with a task
+     * @param input the input from the user
+     * @return the response by the program
+     * @throws DukeException 
+     */
+
+    public String getResponse(String input) throws DukeException {
+        try {
+            return runCommand(input);
+        }
+         catch (DukeException e) {
+            return e.getMessage();
+        }
+
+    }
+
+    /**
+     * 
+     * @param input the input from the user
      * @throws DukeException
      */
 
-    public void runCommand(String command, String description) throws DukeException {
+    public String runCommand(String input) throws DukeException {
         Ui.printLines();
-        description = description.trim();
+
+        String command = Parser.getCommand(input);
+        String description = "";
 
         try {
 
             switch (command) {
+            case "bye":
+                storage.saveTask(taskList.getTaskList());
+                return Ui.byeMessage();
             case "list":
-                Ui.printAllTasks(taskList.getTaskList());
-                break;
+                return Ui.printAllTasks(taskList.getTaskList());
             case "mark":
-                taskList.markTask(description);
-                break;
+                description = Parser.getTaskDescription(input).trim();
+                return taskList.markTask(description);
             case "unmark":
-                taskList.unmarkTask(description);
-                break;
+                description = Parser.getTaskDescription(input).trim();
+                return taskList.unmarkTask(description);
             case "deadline":
-                taskList.addDeadline(description);
-                break;
+                description = Parser.getTaskDescription(input).trim();
+                return taskList.addDeadline(description);
             case "event":
-                taskList.addEvent(description);
-                break;
+                description = Parser.getTaskDescription(input).trim();
+                return taskList.addEvent(description);
             case "todo":
-                taskList.addTodo(description);
-                break;
+                description = Parser.getTaskDescription(input).trim();
+                return taskList.addTodo(description);
             case "delete":
-                taskList.deleteTask(description);
-                break;
+                description = Parser.getTaskDescription(input).trim();
+                return taskList.deleteTask(description);
             case "find":
-                taskList.findTask(description, taskList.getTaskList());
-                break;
+                description = Parser.getTaskDescription(input).trim();
+                return taskList.findTask(description, taskList.getTaskList());
             default:
                 throw new DukeUnknownCommandException();
             }
         }
-        catch (DukeUnknownCommandException | DukeEmptyTaskDescriptionException e) {
-            System.out.println(e.getMessage());
-            Ui.printLines();
+        catch (DukeException e) {
+            return e.getMessage();
         }
     }
 
-    /**
-     * starts the entire program
-     * @throws DukeException
-     */
-
-
-    public void startDuke() throws DukeException{
-        Ui.entryMessage();
-        String command = sc.next();
-        String description = sc.nextLine();
-
-        while (!command.equals("bye")) {
-            runCommand(command, description);
-            command = sc.next();
-            if (!command.equals("bye")) {
-                description = sc.nextLine();
-            }
-        }
-        storage.save(taskList.getTaskList());
-
-        Ui.byeMessage();
-    }
-
-
-    /**
-     * 
-     * @param args
-     * @throws DukeException
-     */
-    public static void main(String[] args) throws DukeException {
-        Duke duke = new Duke();
-        duke.startDuke();
-    }
+ 
 }
