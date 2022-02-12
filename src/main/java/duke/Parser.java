@@ -16,6 +16,7 @@ public class Parser {
      * @return array containing the sate and time split
      */
     public static String[] splitDateAndTime(String description) {
+        assert !description.equals("");
         return description.split(" ", 2);
     }
 

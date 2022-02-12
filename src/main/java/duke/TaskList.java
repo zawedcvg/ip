@@ -70,6 +70,7 @@ public class TaskList {
         if(isEmptyString(description) || index > listOfTasks.size()) {
             throw new DukeIncorrectIndexException();
         }
+        assert index < listOfTasks.size();
         Task task = listOfTasks.get(index - 1);
         listOfTasks.remove(index - 1);
         return Ui.deleteMessage(task, listOfTasks.size());
@@ -80,6 +81,7 @@ public class TaskList {
         if (description.equals("")) {
             throw new DukeEmptyTaskDescriptionException();
         }
+        assert !description.equals("");
         ArrayList<Task> temp = new ArrayList<Task>();
 
         for (Task task : taskList) {

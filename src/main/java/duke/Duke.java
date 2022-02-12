@@ -40,6 +40,7 @@ public class Duke {
 
     public String runCommand(String input) throws DukeException {
         Ui.printLines();
+        //assert false;
 
         String command = Parser.getCommand(input);
         String description = "";
@@ -76,8 +77,7 @@ public class Duke {
             default:
                 throw new DukeUnknownCommandException();
             }
-        }
-        catch (DukeException e) {
+        } catch (DukeException e) {
             return e.getMessage();
         }
     }
