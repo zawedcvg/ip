@@ -31,9 +31,7 @@ public class Storage {
 
             File f = new File(path);
 
-            if (!f.exists()) {
-                f.createNewFile();
-            }
+            f.createNewFile();
 
             FileWriter fw = new FileWriter(f, false);
             for (Task task : listOfTasks) {
