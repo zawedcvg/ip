@@ -96,18 +96,14 @@ public class TaskList {
             i++;
         }
         Arrays.sort(indicesInt, Collections.reverseOrder());
-        for (Integer integer : indicesInt) {
-            System.out.println(integer);
-        }
         for (int index : indicesInt) {
-            System.out.println(index);
             assert index <= listOfTasks.size();
             Task task = listOfTasks.get(index - 1);
             listOfTasks.remove(index - 1);
             deleteString += Ui.deleteMessage(task, listOfTasks.size());
 
         }
-        return deleteString;
+        return deleteString + "You now have " + listOfTasks.size() + " tasks";
 
     }
 

@@ -39,7 +39,7 @@ public class Duke {
      */
 
     public String runCommand(String input) throws DukeException {
-        Ui.printLines();
+        Ui.addNewLine();
         //assert false;
 
         String command = Parser.getCommand(input);

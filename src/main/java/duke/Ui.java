@@ -10,18 +10,18 @@ public class Ui {
     }
 
     public static String entryMessage() {
-        return(printLines() + "Hello I'm Duke\nWhat can I do for you today?" + printLines());
+        return(addNewLine() + "Hello I'm Duke\nWhat can I do for you today?" + addNewLine());
     }
 
     public static String addTaskMessage(Task task) {
-        return (gotItStatement() + printTask(task) + printLines());
+        return (gotItStatement() + printTask(task) + addNewLine());
     }
 
     public static String byeMessage() {
-        return("Bye, see you next time" + printLines());
+        return("Bye, see you next time" + addNewLine());
     }
 
-    public static String printLines() {
+    public static String addNewLine() {
         return("\n");
     }
 
@@ -39,11 +39,11 @@ public class Ui {
             Task currTask = listOfTasks.get(i);
             taskString += indent + currIndex + ". " + currTask + "\n";
         }
-        return taskString + printLines();
+        return taskString + addNewLine();
     }
 
     public static String deleteMessage(Task task, int size) {
-        return(task + printLines());
+        return(task + addNewLine());
 
     }
 
@@ -56,7 +56,7 @@ public class Ui {
         for (Task task : listOfTasks) {
             taskString += indent + task;
         }
-        return("Noted. I have found this tasks matching your description\n" + taskString + printLines());
+        return("Noted. I have found this tasks matching your description\n" + taskString + addNewLine());
 
     }
 
