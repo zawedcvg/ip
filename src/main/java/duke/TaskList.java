@@ -1,5 +1,8 @@
 package duke;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 import duke.exceptions.DukeException;
 import duke.exceptions.DukeEmptyTaskDescriptionException;
 import duke.exceptions.DukeIncorrectIndexException;
@@ -48,32 +51,63 @@ public class TaskList {
     }
 
     public String markTask(String description) throws DukeException {
-        int index = Integer.parseInt(description);
-        if(isEmptyString(description) || index > listOfTasks.size()) {
-            throw new DukeIncorrectIndexException();
+        String markAsDone = "I have marked these tasks as done \n";
+        String[] indices = description.split(" ");
+        for (String indexStr : indices) {
+            
+            int index = Integer.parseInt(indexStr);
+            if(isEmptyString(indexStr) || index > listOfTasks.size()) {
+                throw new DukeIncorrectIndexException();
+            }
+            listOfTasks.get(index - 1).markIsDone();
+            markAsDone = markAsDone +  Ui.markAsDone(listOfTasks.get(index - 1));
         }
-        listOfTasks.get(index - 1).markIsDone();
-        return Ui.markAsDone(listOfTasks.get(index - 1));
+        return markAsDone;
+        
     }
 
     public String unmarkTask(String description) throws DukeException {
-        int index = Integer.parseInt(description);
-        if (isEmptyString(description) || index > listOfTasks.size()) {
-            throw new DukeIncorrectIndexException();
+        String markAsDone = "I have marked these tasks as undone \n";
+        String[] indices = description.split(" ");
+        for (String indexStr : indices) {
+            
+            int index = Integer.parseInt(indexStr);
+            if(isEmptyString(indexStr) || index > listOfTasks.size()) {
+                throw new DukeIncorrectIndexException();
+            }
+            listOfTasks.get(index - 1).unmarkIsDone();
+            markAsDone = markAsDone +  Ui.markAsNotDone(listOfTasks.get(index - 1));
         }
-        listOfTasks.get(index - 1).unmarkIsDone();
-        return Ui.markAsNotDone(listOfTasks.get(index - 1));
+        return markAsDone;
+
     }
 
     public String deleteTask(String description) throws DukeException {
-        int index = Integer.parseInt(description);
-        if(isEmptyString(description) || index > listOfTasks.size()) {
-            throw new DukeIncorrectIndexException();
+        String[] indices = description.split(" ");
+        String deleteString = "The deleted tasks is/are \n";
+        Integer[] indicesInt = new Integer[indices.length];
+        int i = 0;
+        for (String indexStr : indices) {
+            int index = Integer.parseInt(indexStr);
+            if(isEmptyString(indexStr) || index > listOfTasks.size()) {
+                throw new DukeIncorrectIndexException();
+            }
+            indicesInt[i] = Integer.parseInt(indexStr);
+            i++;
         }
-        assert index < listOfTasks.size();
-        Task task = listOfTasks.get(index - 1);
-        listOfTasks.remove(index - 1);
-        return Ui.deleteMessage(task, listOfTasks.size());
+        Arrays.sort(indicesInt, Collections.reverseOrder());
+        for (Integer integer : indicesInt) {
+            System.out.println(integer);
+        }
+        for (int index : indicesInt) {
+            System.out.println(index);
+            assert index <= listOfTasks.size();
+            Task task = listOfTasks.get(index - 1);
+            listOfTasks.remove(index - 1);
+            deleteString += Ui.deleteMessage(task, listOfTasks.size());
+
+        }
+        return deleteString;
 
     }
 
