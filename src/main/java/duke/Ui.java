@@ -56,7 +56,7 @@ public class Ui {
         for (Task task : listOfTasks) {
             taskString += indent + task;
         }
-        return("Noted. I have found this tasks matching your description\n" + taskString + addNewLine());
+        return("Noted. I have found these tasks matching your description\n" + taskString + addNewLine());
 
     }
 
