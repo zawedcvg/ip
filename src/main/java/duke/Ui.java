@@ -26,10 +26,10 @@ public class Ui {
     }
 
     public static String markAsDone(Task task) {
-        return("Nice I have marked this task as done \n" + task);
+        return(task + "\n");
     }
     public static String markAsNotDone(Task task) {
-        return("Ok, I have marked this task as not done: \n" + task);
+        return(task + "\n");
     }
 
     public static String printAllTasks(ArrayList<Task> listOfTasks) {
@@ -43,7 +43,7 @@ public class Ui {
     }
 
     public static String deleteMessage(Task task, int size) {
-        return(indent + "Noted. I have removed this task\n" + task + printSize(size) + printLines());
+        return(task + printLines());
 
     }
 
