@@ -8,6 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 /**
  * Controller for MainWindow. Provides the layout for the other controls.
  */
@@ -22,6 +23,9 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
 
     private Duke duke;
+
+    private static final Font CHAT_FONT = Font.loadFont(
+            DialogBox.class.getResource("/fonts/JetBrainsMono-Regular.ttf").toExternalForm(), 12);
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
     private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
@@ -42,6 +46,8 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() throws DukeException {
         String input = userInput.getText();
+        userInput.setFont(CHAT_FONT);
+        sendButton.setFont(CHAT_FONT);
         String response = duke.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
